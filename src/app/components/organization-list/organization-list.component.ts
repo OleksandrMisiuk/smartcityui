@@ -1,4 +1,4 @@
-import { Component, OnInit, } from '@angular/core';
+import { Component, OnInit, Injectable, } from '@angular/core';
 import { OrganizationListService } from 'src/app/services/organization.service';
 
 @Component({
@@ -20,5 +20,4 @@ export class OrganizationListComponent implements OnInit {
       console.log(this.organizations);
   });
   }
-
 }
