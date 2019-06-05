@@ -1,0 +1,33 @@
+<div style="background-color: rgba(246, 246, 246, 0.9); margin: 5% 25%;
+padding: 10px 10px;">
+  <div>
+    
+    <div style="color: gray">Task {{(this.id!=null)?"#"+this.id:"is still loading"}}</div>
+    <div>
+      <h2 class="inline-block-child">{{this.name||"Task title"}}</h2>
+      <button (click)="this.handleEdit(this.id)"><i class="fas fa-pen fa-lg"></i></button>
+      <button (click)="this.handleDelete(this.id)"><i class="fas fa-trash fa-lg"></i></button>
+      <button (click)="this.refOnComments(this.id)"><i class="fas fa-comments-dollar fa-lg"></i></button>
+    </div>
+    
+    <div style="margin-bottom:10px">
+      <div class="task-status-item inline-block-child task-status-right-border">
+        <div *ngIf="this.approvedBudget==this.requestedBudget; then budgetRequestFullfilled else budgetRequestUnfullfilled"></div>
+        <ng-template #budgetRequestFullfilled>
+          <i class="fas fa-dollar-sign"></i> Budget: {{this.approvedBudget}}
+        </ng-template>
+        <ng-template #budgetRequestUnfullfilled>  
+          <i class="fas fa-dollar-sign"></i>Budget: requested {{this.requestedBudget}}, approved {{this.approvedBudget}}
+        </ng-template>
+      </div>
+      <div class="task-status-item inline-block-child task-status-right-border">
+          <i class="fas fa-stopwatch"></i> Deadline: {{this.deadline||"loading"}}
+      </div>
+      <div class="task-status-item inline-block-child">
+          <i class="fas fa-clipboard"></i> Status: {{this.status||"loading"}}
+      </div>
+    </div>
+    <p>{{this.description||"Task description"}}</p>
+    <br>
+  </div>
+</div>

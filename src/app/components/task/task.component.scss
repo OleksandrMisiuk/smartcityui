@@ -1,0 +1,19 @@
+.inline-block-child{
+    display: inline-block
+}
+
+.task-status-item{
+    padding: 0px 15px;
+    background-color: rgba(0,0,0,0.1);
+}
+
+.task-status-right-border{
+    border-right: solid 1px gray;
+}
+
+button {
+    border: none;
+    background: transparent;
+    text-decoration: none;
+    outline: none;
+}

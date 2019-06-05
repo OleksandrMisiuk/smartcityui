@@ -17,7 +17,7 @@ import { UserUpdateComponent } from './components/user-update/user-update.compon
 import { PasswordUpdateComponent } from './components/password-update/password-update.component';
 import {CreateOrganizationComponent} from './components/create-organization/create-organization.component';
 import { UpdateOrganizationComponent } from './components/update-organization/update-organization.component';
-
+import { TaskComponent } from './components/task/task.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +34,8 @@ import { UpdateOrganizationComponent } from './components/update-organization/up
     UserUpdateComponent,
     PasswordUpdateComponent,
     CreateOrganizationComponent,
-    UpdateOrganizationComponent
+    UpdateOrganizationComponent,
+    TaskComponent
   ],
   imports: [
     BrowserModule,
