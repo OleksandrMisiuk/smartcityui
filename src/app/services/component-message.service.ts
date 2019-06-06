@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ComponentMessageService {
 
-  messageProvider = new BehaviorSubject(Object);
+  messageProvider = new BehaviorSubject(null);
   currentMessage = this.messageProvider.asObservable();
 
   constructor() { }

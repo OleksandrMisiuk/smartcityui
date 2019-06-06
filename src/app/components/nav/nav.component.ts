@@ -20,22 +20,33 @@ export class NavComponent implements OnInit {
   }
 
   refreshBudget(){
+    var token = localStorage.getItem("token");
+    if(token==null){
+      return;
+    }
     this.budgetService.getBudget().subscribe(data=>{
       this.budget = data;
     });
   }
 
   ngOnInit() {
-    this.userService.getUserbyEmail(localStorage.getItem('email')).subscribe(data =>{
-      this.user = data;
-    });
 
-    // Refresh budget value upon component load
-    this.refreshBudget();
-    
-    this.compMessage.currentMessage.subscribe(user => {
-      this.user = user;
-    });
+    var token = localStorage.getItem("token");
+
+    if(token!=null){
+      this.userService.getUserbyEmail(localStorage.getItem('email')).subscribe(data =>{
+        this.user = data;
+      });
+
+      // Refresh budget value upon component load
+      this.refreshBudget();
+      
+      this.compMessage.currentMessage.subscribe(user => {
+        this.user = user;
+      });
+    }else{
+      this.router.navigateByUrl("/home/signin");
+    }
 
     // Refresh budget value upon route change
     this.router.events.subscribe(event => {
