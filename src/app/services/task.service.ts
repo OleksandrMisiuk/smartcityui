@@ -10,12 +10,15 @@ export class TaskService {
 
   constructor(private http: HttpClient) { }
 
-  findTaskById(id){
+  findTaskById(id) {
     let headers = new HttpHeaders();
     if (localStorage.getItem('token') == null) {
-      return new Observable;
+      console.log('IN findTaskById(' + id + ') TOKEN NULL');
+      return new Observable();
     };
-    headers = headers.append('authorization', 'Bearer ' + localStorage.getItem('token'));
+    headers = headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    console.log('IN findTaskById(' + id + ') IS OK' + localStorage.getItem('token'));
+    console.log('findTaskById RETURN: ' + this.http.get('http://localhost:8080/smartcity_war/tasks/' + id, { headers }));
     return this.http.get('http://localhost:8080/smartcity_war/tasks/' + id, { headers });
   }
 
@@ -57,12 +60,14 @@ export class TaskService {
     });
   }
 
-  updateTask(id,taskDto){
+  updateTask(id, task: any){
     let headers = new HttpHeaders();
     if (localStorage.getItem('token') == null) {
-      return new Observable;
+      return new Observable();
     };
+    console.log('id: ' + id + 'taskDto' + task);
     headers = headers.append('authorization', 'Bearer ' + localStorage.getItem('token'));
-    return this.http.put('http://localhost:8080/smartcity_war/tasks/' + id,taskDto, { headers });
+    headers.append('Content-Type', 'application/json');
+    return this.http.put('http://localhost:8080/smartcity_war/tasks/' + id, task, { headers });
   }
   }

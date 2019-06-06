@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TaskService } from 'src/app/services/task.service';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-task-create',

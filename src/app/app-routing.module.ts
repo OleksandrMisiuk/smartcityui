@@ -12,6 +12,7 @@ import { UserUpdateComponent } from './components/user-update/user-update.compon
 import { PasswordUpdateComponent } from './components/password-update/password-update.component';
 import {CreateOrganizationComponent} from './components/create-organization/create-organization.component';
 import {UpdateOrganizationComponent} from './components/update-organization/update-organization.component';
+import {TaskUpdateComponent} from './components/task-update/task-update.component';
 
 export const routes: Routes = [
   {
@@ -41,6 +42,10 @@ export const routes: Routes = [
       {
         path: 'task/create/:id',
         component: TaskCreateComponent
+      },
+      {
+        path: 'task/edit/:id',
+        component: TaskUpdateComponent
       },
       {
         path: 'user-update',

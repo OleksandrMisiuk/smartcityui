@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="my-5 col-sm-6 offset-sm-3 text-center">
+    <div *ngIf="task">
+  <h2> Update Task "{{task.title}}" {{task.usersOrganizationsId}}</h2>
+    </div>
+    <br>
+    <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)"
+      class="form-inlin justify-content-center">
+      <div class="form-group row">
+        <input type="text" class="form-control" formControlName="title" placeholder="Title" value=" {{task.title}} ">
+      </div>
+      <div class="form-group row">
+        <input type="textarea" class="form-control" formControlName="description" placeholder="Description" value=" {{task.description}} ">
+      </div>
+      <div class="form-group row">
+        <input type="number" class="form-control" formControlName="budget" placeholder="Budget" value="{{task.budget}}">
+      </div>
+      <div class="form-group row">
+          <input type="number" class="form-control" formControlName="approvedBudget" placeholder="Approved Budget" value="{{task.approvedBudget}}">
+        </div>
+      <div class="form-group row">
+        <input type="text" class="form-control" formControlName="deadlineDate" placeholder="Deadline date" value="{{task.deadlineDate}}">
+      </div>
+      <div class="form-group row">
+          <input type="text" class="form-control" formControlName="taskStatus" placeholder="Task Status" value="{{task.taskStatus}}">
+        </div>
+      <div class="form-group row">
+          <input type="hidden" class="form-control" formControlName="usersOrganizationsId" value="{{task.usersOrganizationsId}}">
+        </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+  </div>
+</div>
