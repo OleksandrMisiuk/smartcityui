@@ -17,11 +17,18 @@
                   <div class="col-md-12">
                     <div class="form-group">
                       <textarea id="form_message" class="form-control"   [(ngModel)]="inputDescription" formControlName="description" class="form-control" placeholder="write a comment...*" rows="4"  data-error="Залиште повідомлення."></textarea>
-                      <div class="help-block with-errors">
-                        <div *ngIf="description.invalid && (description.dirty || description.touched)" class="alert alert-danger" style="width: 100%">
+                        <div *ngIf="description.invalid && (description.dirty || description.touched)" style="width: 100%">
                           <div *ngIf="description.errors.required">
-                            Address is required.
+                            <div class="alert alert-danger alert-dismissible fade show">
+                              <strong>Error!</strong> A problem has been occurred while submitting your data.
+                              <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            </div>
                           </div>
+                      </div>
+                      <div>
+                        <div class="alert alert-success alert-dismissible fade show">
+                          <strong>Success!</strong> Your message has been sent successfully.
+                          <button type="button" class="close" data-dismiss="alert">&times;</button>
                         </div>
                       </div>
                     </div>
@@ -48,6 +55,11 @@
                     <p>
                       {{commment.description}}
                     </p>
+                    <div class="text-right">
+                      <button  *ngIf="checkOnOwner(commment.userId)" (click)="handleEdit(commment.id)" class="btn btn-primary btn-marg text-right" href="#">Редагувати</button>
+
+                      <button *ngIf="checkOnOwner(commment.userId)" (click)="handleDelete(commment.id)" class="btn btn-danger btn-marg text-right" href="#">Видалити</button>
+                    </div>
                   </div>
                 </li>
               </ul>
