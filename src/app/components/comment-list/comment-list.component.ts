@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CommentService} from '../../services/comment.service';
 import {TaskService} from '../../services/task.service';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {UserService} from '../../services/user.service';
 
 @Component({
@@ -13,9 +13,9 @@ import {UserService} from '../../services/user.service';
 export class CommentListComponent implements OnInit {
   comments;
   task;
-  isCreated: boolean;
   checkoutForm;
   user;
+  inputDescription;
   constructor(private commentService: CommentService, private userService: UserService, private formBuilder: FormBuilder,
               private taskService: TaskService,
               private actRouter: ActivatedRoute, private router: Router) {
@@ -23,12 +23,14 @@ export class CommentListComponent implements OnInit {
       this.user = date;
     });
     this.checkoutForm = this.formBuilder.group({
-      description: 'Default Message!',
+      description: ['', [Validators.required]],
       taskId: this.actRouter.snapshot.paramMap.get('id'),
       userId: ''
     });
 }
-
+  get description() {
+    return this.checkoutForm.get('description');
+  }
   ngOnInit() {
 
 
@@ -57,22 +59,22 @@ export class CommentListComponent implements OnInit {
   handleCreate(comment) {
     console.log(comment);
     this.commentService.createComment(comment);
-    this.isCreated = !this.isCreated;
     setTimeout(() =>
     {
       this.commentService.findCommentByTaskId(this.actRouter.snapshot.paramMap.get('id'))
         .subscribe(data => {
           this.comments = data;
+          this.checkoutForm.controls.description.setValue('');
         });
     }, 1000);
+
+
   }
 
   checkOnOwner(id) {
       return id == this.user.id;
   }
-  viewFormCreate() {
-    this.isCreated = !this.isCreated;
-  }
+
 }
 
 
