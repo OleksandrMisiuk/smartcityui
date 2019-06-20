@@ -1,5 +1,5 @@
 .container{
-  padding: 100px;
+  padding: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -69,12 +69,12 @@
   padding: 5px;
   display: flex;
   flex-direction: row;
-  border-bottom: 1px dashed #efefef;
+  border-bottom: 2px dashed #efefef;
   margin-bottom: 25px;
 }
 .comment-block:first-child{
   padding-top: 20px;
-  border-top: 1px solid #eee;
+  border-top: 2px solid #eee;
 }
 .avatar{
   border-radius: 50%;
@@ -94,4 +94,19 @@
 }
 .btn-marg{
   margin-left: 15px;
+}
+.btn-marg-botom{
+  margin-bottom: 30px;
+}
+
+.description{
+  background-color: #dbdbdb;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.sort-classs{
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
 }

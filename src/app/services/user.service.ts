@@ -33,7 +33,7 @@ export class UserService {
 
   getUserbyId(id) {
     let headers = this.getAuthHeader();
-    return this.http.get('http://localhost:8080/smartcity_war/users/?email=' + id, {headers});
+    return this.http.get('http://localhost:8080/smartcity_war/users/' + id, {headers});
   }
 
   getAuthenticatedUser(): Observable<User> {
