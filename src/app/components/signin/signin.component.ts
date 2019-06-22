@@ -33,7 +33,7 @@ export class SigninComponent implements OnInit {
           this.compMessage.changeMessage(this.user);
         }); 
         this.router.navigateByUrl('/home/organizations')
-      }, 800);
+      }, 1000);
   }
 
 }
