@@ -6,16 +6,20 @@ import {FormBuilder} from '@angular/forms';
 import {UserService} from '../../services/user.service';
 import {Comment} from '../../model/Comment';
 import {User} from "../../model/User";
+import {Task} from "../../model/Task";
+import {DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'app-comment-list',
   templateUrl: './comment-list.component.html',
   styleUrls: ['./comment-list.component.scss']
 })
+
 export class CommentListComponent implements OnInit {
-  comments: Comment[];
-  allComments: Comment[];
-  task;
+
+  comments: Comment[] = [];
+  allComments: Comment[] = [];
+  task:Task = null;
   checkoutForm;
   user:User;
   isSuccesfullMessage: boolean;
@@ -23,17 +27,16 @@ export class CommentListComponent implements OnInit {
   searchText:string;
   isMoreView:boolean;
 
-
   constructor(private commentService: CommentService, private userService: UserService, private formBuilder: FormBuilder,
               private taskService: TaskService,
-              private actRouter: ActivatedRoute, private router: Router) {
+              private actRouter: ActivatedRoute, private router: Router,private dialogService: DialogService) {
 
 
   }
 
   ngOnInit() {
     this.taskService.findTaskById(this.actRouter.snapshot.paramMap.get('id'))
-      .subscribe(data => {
+      .subscribe((data:Task) => {
         this.task = data;
       })
 
@@ -57,10 +60,15 @@ export class CommentListComponent implements OnInit {
   }
 
   handleDelete(comment:Comment) {
-    this.commentService.deleteComment(comment.id).subscribe(date =>{
-      this.comments = this.comments.filter(item => item.id !== comment.id);
-      this.allComments = this.allComments.filter(item => item.id !== comment.id);
-      console.log(date);
+    this.dialogService.openConfirmDialog('Are you sure to delete this comment?')
+      .afterClosed().subscribe(res => {
+      if (res) {
+        this.commentService.deleteComment(comment.id).subscribe(date => {
+          this.comments = this.comments.filter(item => item.id !== comment.id);
+          this.allComments = this.allComments.filter(item => item.id !== comment.id);
+          console.log(date);
+        });
+      }
     });
 
   }
@@ -90,19 +98,22 @@ export class CommentListComponent implements OnInit {
 
 
   viewMore(){
-
     this.comments = this.allComments.slice(0,this.comments.length+10);
-
-
   }
+
   messageSuccsesfulClose(){
     this.isSuccesfullMessage= false;
   }
+
   messageValidationClose(){
     this.isValidationMessage = false;
   }
-  checkOnOwner(comment:Comment) {
-        return comment.userId == this.user.id;
+
+  checkOnOwner(comment:Comment):boolean {
+    if(this.user) {
+      return comment.userId === this.user.id;
+    }
+    return false;
   }
 
   goBackToTask(){
@@ -135,11 +146,9 @@ export class CommentListComponent implements OnInit {
   }
 
   search(){
-
       this.comments = this.allComments.filter(value =>
         value.userId.toString().indexOf(this.searchText) > -1
       );
-
       if(this.searchText !== ''){
         this.isMoreView = true;
       }
@@ -150,6 +159,7 @@ export class CommentListComponent implements OnInit {
         }
       }
   }
+
 }
 
 
