@@ -30,12 +30,12 @@ export class CommentEditComponent implements OnInit {
         this.commentService.updateComment(this.actRouter.snapshot.paramMap.get('id'), com).subscribe((date: Comment) => {
           console.log(date);
           this.router.navigateByUrl('home/comments/' + com.taskId);
-          this.notificationService.showSuccessWithTimeout("Comment has been successfully updated!","Success",4500);
+          this.notificationService.showSuccessWithTimeout("Comment has been successfully updated!","Success",3200);
         });
       });
     }
     else{
-      this.notificationService.showErrorWithTimeout("You do not update the comment with the empty description!!!","Error",4500);
+      this.notificationService.showErrorWithTimeout("You do not update the comment with the empty description!!!","Error",4200);
     }
   }
   onClickCancel() {

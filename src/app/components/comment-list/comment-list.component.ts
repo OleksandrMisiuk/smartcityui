@@ -2,13 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CommentService} from '../../services/comment.service';
 import {TaskService} from '../../services/task.service';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../services/user.service';
 import {Comment} from '../../model/Comment';
 import {User} from "../../model/User";
 import {Task} from "../../model/Task";
 import {DialogService} from "../../services/dialog.service";
-import { ToastrService } from 'ngx-toastr';
 import {NotificationService} from "../../services/notification.service";
 
 @Component({
@@ -22,7 +21,7 @@ export class CommentListComponent implements OnInit {
   comments: Comment[] = [];
   allComments: Comment[] = [];
   task:Task = null;
-  checkoutForm;
+  createCommentForm:FormGroup;
   user:User;
   isSuccesfullMessage: boolean;
   isValidationMessage:boolean;
@@ -31,8 +30,10 @@ export class CommentListComponent implements OnInit {
 
   constructor(private commentService: CommentService, private userService: UserService, private formBuilder: FormBuilder,
               private taskService: TaskService,
-              private actRouter: ActivatedRoute, private router: Router,private dialogService: DialogService, private notification : NotificationService) {
-
+              private actRouter: ActivatedRoute, private router: Router,private dialogService: DialogService, private notificationService : NotificationService) {
+    this.createCommentForm = this.formBuilder.group({
+      description: ['', [Validators.required]],
+    });
 
   }
 
@@ -48,7 +49,7 @@ export class CommentListComponent implements OnInit {
           this.comments = data.slice(0,10);
       });
 
-    this.checkoutForm = this.formBuilder.group({
+    this.createCommentForm = this.formBuilder.group({
       description: ''
     });
     this.userService.getAuthenticatedUser().subscribe((date:User) => {
@@ -56,7 +57,9 @@ export class CommentListComponent implements OnInit {
     });
 
   }
-
+  get description() {
+    return this.createCommentForm.get('description');
+  }
   handleEdit(comment:Comment) {
     this.router.navigateByUrl('/home/comments/edit/' + comment.id);
   }
@@ -70,7 +73,7 @@ export class CommentListComponent implements OnInit {
           this.comments = this.allComments.slice(0,10);
           if(this.comments.length > 10) this.isMoreView = false;
           console.log(date);
-          this.notification.showSuccessWithTimeout("Comment has been successfully deleted!","Success",5600);
+          this.notificationService.showSuccessWithTimeout("Comment has been successfully deleted!","Success",3200);
         });
       }
     });
@@ -85,9 +88,9 @@ export class CommentListComponent implements OnInit {
       ((date: Comment) => {
           this.isSuccesfullMessage = true;
           this.isValidationMessage = false;
-          this.checkoutForm.controls['description'].setValue('');
+          this.createCommentForm.controls['description'].setValue('');
           console.log(comment);
-          this.notification.showSuccessWithTimeout("Comment has been successfully created!","Success",5600);
+          this.notificationService.showSuccessWithTimeout("Comment has been successfully created!","Success",3200);
           this.commentService.findCommentById(date.id).subscribe((result: Comment) => {
             this.comments.unshift(result);
             this.comments = this.comments.slice(0,10);
@@ -98,6 +101,7 @@ export class CommentListComponent implements OnInit {
     }
     else {
       this.isValidationMessage = true;
+      this.notificationService.showErrorWithTimeout("You do not create the comment with the empty description!!!","Error",4200);
     }
   }
 
@@ -110,9 +114,6 @@ export class CommentListComponent implements OnInit {
     this.isSuccesfullMessage= false;
   }
 
-  messageValidationClose(){
-    this.isValidationMessage = false;
-  }
 
   checkOnOwner(comment:Comment):boolean {
     if(this.user) {
@@ -136,7 +137,7 @@ export class CommentListComponent implements OnInit {
       return -1;
     })
     this.comments = this.allComments.slice(0,10);
-    this.notification.showInfoWithTimeout("The comment list was sorted by date, first new then old","Success",4200);
+    this.notificationService.showInfoWithTimeout("The comment list was sorted by date, first new then old","Success",4200);
   }
   sortOld(){
     this.allComments.sort((a, b) => {
@@ -149,7 +150,7 @@ export class CommentListComponent implements OnInit {
       return -1;
     })
     this.comments = this.allComments.slice(0,10);
-    this.notification.showInfoWithTimeout("The comment list was sorted by date, first old then new","Success",4200);
+    this.notificationService.showInfoWithTimeout("The comment list was sorted by date, first old then new","Success",4200);
 
   }
 
@@ -167,6 +168,10 @@ export class CommentListComponent implements OnInit {
         }
       }
   }
+  messageValidationClose(){
+    this.isValidationMessage = false;
+  }
+
 
 }
 

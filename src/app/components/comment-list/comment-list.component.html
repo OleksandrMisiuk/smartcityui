@@ -26,18 +26,18 @@
             Comments ({{allComments.length}})
           </div>
           <div class="form-block">
-            <form id="contact-form" [formGroup]="checkoutForm" (ngSubmit)="handleCreate(checkoutForm.value)" role="form">
+            <form id="contact-form" [formGroup]="createCommentForm" (ngSubmit)="handleCreate(createCommentForm.value)" role="form">
               <div class="controls">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
                       <textarea id="form_message" class="form-control"   formControlName="description" class="form-control" placeholder="write a comment...*" rows="4"  data-error="Залиште повідомлення."></textarea>
-                          <div *ngIf="isValidationMessage">
-                            <div class="alert alert-danger alert-dismissible fade show">
-                              <strong>Error!</strong> Comment can not be empty!
-                              <button type="button" (click)="messageValidationClose()" class="close" data-dismiss="alert">&times;</button>
-                            </div>
-                          </div>
+                      <div *ngIf="isValidationMessage">
+                      <div class="alert alert-danger alert-dismissible fade show">
+                        <strong>Error!</strong> Comment can not be empty!
+                        <button type="button" (click)="messageValidationClose()" class="close" data-dismiss="alert">&times;</button>
+                      </div>
+                    </div>
 
                       <div *ngIf="isSuccesfullMessage">
                         <div class="alert alert-success alert-dismissible fade show">
