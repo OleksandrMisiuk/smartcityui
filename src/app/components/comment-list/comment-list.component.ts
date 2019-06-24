@@ -8,6 +8,8 @@ import {Comment} from '../../model/Comment';
 import {User} from "../../model/User";
 import {Task} from "../../model/Task";
 import {DialogService} from "../../services/dialog.service";
+import { ToastrService } from 'ngx-toastr';
+import {NotificationService} from "../../services/notification.service";
 
 @Component({
   selector: 'app-comment-list',
@@ -29,7 +31,7 @@ export class CommentListComponent implements OnInit {
 
   constructor(private commentService: CommentService, private userService: UserService, private formBuilder: FormBuilder,
               private taskService: TaskService,
-              private actRouter: ActivatedRoute, private router: Router,private dialogService: DialogService) {
+              private actRouter: ActivatedRoute, private router: Router,private dialogService: DialogService, private notification : NotificationService) {
 
 
   }
@@ -64,9 +66,11 @@ export class CommentListComponent implements OnInit {
       .afterClosed().subscribe(res => {
       if (res) {
         this.commentService.deleteComment(comment.id).subscribe(date => {
-          this.comments = this.comments.filter(item => item.id !== comment.id);
           this.allComments = this.allComments.filter(item => item.id !== comment.id);
+          this.comments = this.allComments.slice(0,10);
+          if(this.comments.length > 10) this.isMoreView = false;
           console.log(date);
+          this.notification.showSuccessWithTimeout("Comment has been successfully deleted!","Success",5600);
         });
       }
     });
@@ -83,6 +87,7 @@ export class CommentListComponent implements OnInit {
           this.isValidationMessage = false;
           this.checkoutForm.controls['description'].setValue('');
           console.log(comment);
+          this.notification.showSuccessWithTimeout("Comment has been successfully created!","Success",5600);
           this.commentService.findCommentById(date.id).subscribe((result: Comment) => {
             this.comments.unshift(result);
             this.comments = this.comments.slice(0,10);
@@ -131,6 +136,7 @@ export class CommentListComponent implements OnInit {
       return -1;
     })
     this.comments = this.allComments.slice(0,10);
+    this.notification.showInfoWithTimeout("The comment list was sorted by date, first new then old","Success",4200);
   }
   sortOld(){
     this.allComments.sort((a, b) => {
@@ -143,6 +149,8 @@ export class CommentListComponent implements OnInit {
       return -1;
     })
     this.comments = this.allComments.slice(0,10);
+    this.notification.showInfoWithTimeout("The comment list was sorted by date, first old then new","Success",4200);
+
   }
 
   search(){
