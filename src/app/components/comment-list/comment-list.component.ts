@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CommentService} from '../../services/comment.service';
 import {TaskService} from '../../services/task.service';
@@ -45,18 +45,27 @@ export class CommentListComponent implements OnInit {
 
     this.commentService.findCommentByTaskId(this.actRouter.snapshot.paramMap.get('id'))
       .subscribe((data:Comment[]) => {
+        console.log(data);
           this.allComments = data;
           this.comments = data.slice(0,10);
+        this.userService.getAuthenticatedUser().subscribe((date:User) => {
+          this.user = date;
+          let count = 0;
+          this.allComments.forEach(v => {
+            if (v.userId !== this.user.id && !v.userSeen.some(t => t == this.user.id)) count = count + 1;
+          });
+          if (count !== 0)
+            this.notificationService.showInfoWithTimeout("You have " + count + " unread comments", "Info", 6500);
+        });
       });
 
     this.createCommentForm = this.formBuilder.group({
       description: ''
     });
-    this.userService.getAuthenticatedUser().subscribe((date:User) => {
-      this.user = date;
-    });
-
   }
+
+
+
   get description() {
     return this.createCommentForm.get('description');
   }
@@ -170,6 +179,24 @@ export class CommentListComponent implements OnInit {
   }
   messageValidationClose(){
     this.isValidationMessage = false;
+  }
+
+  checkOnSeen(comment:Comment):boolean{
+    if(this.user) {
+      return !(comment.userSeen.some(t => t === this.user.id));
+    }
+    return false;
+  }
+
+  addToSeen(comment:Comment){
+    if(this.user) {
+      this.commentService.addUserToCommentSeen(comment.id,this.user.id).subscribe( (res:boolean) =>{
+        if(res){
+          comment.userSeen.push(this.user.id);
+          this.notificationService.showSuccessWithTimeout("You marked this comment as read!","Succses",4500);
+        }
+      });
+    }
   }
 
 
