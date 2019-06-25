@@ -2,7 +2,7 @@
   <div *ngFor="let organization of organizations" class="mt-4 mb-4 card-wrapper">
     <div class="card border-dark">
       <div class="card-header">
-        <div class="row list-goup list-group-horizontal mx-auto">
+        <div class="row list-group list-group-horizontal mx-auto">
           <div class="col border list-group-item-success">
             {{organization.numberDone}}
           </div>
@@ -21,7 +21,7 @@
         <h5 class="card-title text-center">{{organization.name}}</h5>
         <br>
         <div
-          *ngIf="this.userVerificationService.adminVerification() || this.userVerificationService.supervisorVerification()"
+          *ngIf="this.userVerificationService.responsiblePersonVerification() || this.userVerificationService.supervisorVerification()"
           (click)="onClickCreateTask(organization.id)" class="create-task-button">
           <img src="/assets/plus1.png">
         </div>
@@ -32,8 +32,9 @@
              (click)="onClickUpdateOrganization(organization.id)">
           <img src="/assets/update.png" class="update-organization-button">
         </div>
-        <div *ngIf="this.userVerificationService.adminVerification()"
-             (click)="onClickUsersOrganization(organization.id)">
+        <div
+          *ngIf="this.userVerificationService.adminVerification() || this.userVerificationService.supervisorVerification()"
+          (click)="onClickUsersOrganization(organization.id)">
           <img src="/assets/users-organization.png" class="users-organization-button">
         </div>
       </div>
