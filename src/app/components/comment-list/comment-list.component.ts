@@ -9,6 +9,7 @@ import {User} from "../../model/User";
 import {Task} from "../../model/Task";
 import {DialogService} from "../../services/dialog.service";
 import {NotificationService} from "../../services/notification.service";
+import {UserVerificationService} from "../../services/user-verification.service";
 
 @Component({
   selector: 'app-comment-list',
@@ -29,7 +30,7 @@ export class CommentListComponent implements OnInit {
   isMoreView:boolean;
 
   constructor(private commentService: CommentService, private userService: UserService, private formBuilder: FormBuilder,
-              private taskService: TaskService,
+              private taskService: TaskService, private userVerificationService:UserVerificationService,
               private actRouter: ActivatedRoute, private router: Router,private dialogService: DialogService, private notificationService : NotificationService) {
     this.createCommentForm = this.formBuilder.group({
       description: ['', [Validators.required]],
