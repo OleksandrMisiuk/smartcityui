@@ -41,13 +41,21 @@ export class CommentListComponent implements OnInit {
     this.taskService.findTaskById(this.actRouter.snapshot.paramMap.get('id'))
       .subscribe((data:Task) => {
         this.task = data;
-      })
+      }, (error) =>
+          this.notificationService.showErrorHTMLMessage(error,"Error")
+      );
 
     this.commentService.findCommentByTaskId(this.actRouter.snapshot.paramMap.get('id'))
       .subscribe((data:Comment[]) => {
         console.log(data);
-          this.allComments = data;
-          this.comments = data.slice(0,10);
+        this.allComments = data;
+        this.allComments.map(t => {
+          this.userService.getUserbyId(t.userId).subscribe((date:User) =>{
+            t.createName = date.surname + " " + date.name;
+            return t;
+          });
+        });
+        this.comments = data.slice(0,10);
         this.userService.getAuthenticatedUser().subscribe((date:User) => {
           this.user = date;
           let count = 0;
@@ -55,9 +63,12 @@ export class CommentListComponent implements OnInit {
             if (v.userId !== this.user.id && !v.userSeen.some(t => t == this.user.id)) count = count + 1;
           });
           if (count !== 0)
+
             this.notificationService.showInfoWithTimeout("You have " + count + " unread comments", "Info", 6500);
         });
-      });
+      }, (error) =>
+        this.notificationService.showErrorHTMLMessage(error.error.message,"Error")
+      );
 
     this.createCommentForm = this.formBuilder.group({
       description: ''
@@ -83,7 +94,11 @@ export class CommentListComponent implements OnInit {
           if(this.comments.length > 10) this.isMoreView = false;
           console.log(date);
           this.notificationService.showSuccessWithTimeout("Comment has been successfully deleted!","Success",3200);
-        });
+        }, (error) =>
+        {
+            this.notificationService.showErrorHTMLMessage(error.error.message,"Error");
+        }
+        );
       }
     });
 
@@ -101,11 +116,16 @@ export class CommentListComponent implements OnInit {
           console.log(comment);
           this.notificationService.showSuccessWithTimeout("Comment has been successfully created!","Success",3200);
           this.commentService.findCommentById(date.id).subscribe((result: Comment) => {
+            result.createName = this.user.surname + " " + this.user.name;
             this.comments.unshift(result);
             this.comments = this.comments.slice(0,10);
             this.allComments.unshift(result);
-          });
+          }, (error) =>
+            this.notificationService.showErrorHTMLMessage(error.error.message,"Error")
+          );
         }
+      , (error) =>
+          this.notificationService.showErrorHTMLMessage(error.error.message,"Error")
       );
     }
     else {
@@ -132,7 +152,7 @@ export class CommentListComponent implements OnInit {
   }
 
   goBackToTask(){
-    this.router.navigateByUrl('/home/organizations');
+    this.router.navigateByUrl('/home/organizations/');
   }
 
   sortNew(){
@@ -146,8 +166,9 @@ export class CommentListComponent implements OnInit {
       return -1;
     })
     this.comments = this.allComments.slice(0,10);
-    this.notificationService.showInfoWithTimeout("The comment list was sorted by date, first new then old","Success",4200);
+    this.notificationService.showInfoWithTimeout("The comment list was sorted by date, first new then old","Info",4200);
   }
+
   sortOld(){
     this.allComments.sort((a, b) => {
       var date = new Date(a.createdDate);
@@ -159,13 +180,18 @@ export class CommentListComponent implements OnInit {
       return -1;
     })
     this.comments = this.allComments.slice(0,10);
-    this.notificationService.showInfoWithTimeout("The comment list was sorted by date, first old then new","Success",4200);
+    this.notificationService.showInfoWithTimeout("The comment list was sorted by date, first old then new","Info",4200);
 
   }
 
   search(){
       this.comments = this.allComments.filter(value =>
-        value.userId.toString().indexOf(this.searchText) > -1
+      {
+        if(value.createName) {
+          return value.createName.indexOf(this.searchText) > -1
+        }
+        return false;
+      }
       );
       if(this.searchText !== ''){
         this.isMoreView = true;
@@ -199,6 +225,21 @@ export class CommentListComponent implements OnInit {
     }
   }
 
+  viewAll(){
+    this.comments = this.allComments.slice(0,10);
+    this.isMoreView = false;
+    this.notificationService.showInfoWithTimeout("The comment list was filter, you see all comment","Info",2400);
+
+  }
+
+  viewNew(){
+    if(this.user) {
+      this.comments = this.allComments.filter(t => this.checkOnSeen(t) && !this.checkOnOwner(t));
+      this.isMoreView = true;
+      this.notificationService.showInfoWithTimeout("The comment list was filter, you see only new comment","Info",2400);
+
+    }
+  }
 
 }
 
