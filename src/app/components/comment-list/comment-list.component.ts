@@ -89,7 +89,7 @@ export class CommentListComponent implements OnInit {
     this.dialogService.openConfirmDialog('Are you sure to delete this comment?')
       .afterClosed().subscribe(res => {
       if (res) {
-        this.commentService.deleteComment(comment.id).subscribe(date => {
+        this.commentService.deleteComment(comment).subscribe(date => {
           this.allComments = this.allComments.filter(item => item.id !== comment.id);
           this.comments = this.allComments.slice(0,10);
           if(this.comments.length > 10) this.isMoreView = false;

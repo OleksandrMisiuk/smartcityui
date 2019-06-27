@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Observable} from "rxjs";
+import {Comment} from "../model/Comment";
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +28,9 @@ export class CommentService {
     return this.http.post('http://localhost:8080/smartcity_war/comments/', commentDto, {headers});
   }
 
-  deleteComment(id): Observable<any>{
+  deleteComment(comment:Comment): Observable<any>{
     let headers = this.getAuthHeader();
-    return this.http.delete('http://localhost:8080/smartcity_war/comments/' + id, { headers });
+    return this.http.delete('http://localhost:8080/smartcity_war/comments/' + comment.id + "?userId=" + comment.userId, { headers });
   }
 
   updateComment(id, commentDto): Observable<any>{

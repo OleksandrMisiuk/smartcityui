@@ -87,7 +87,7 @@
              <button (click)="viewMore()" class="btn btn-primary btn-marg-botom">View more Comments! ({{allComments.length - comments.length}})</button>
         </div>
         <div *ngIf="comments.length === 0">
-          <h2>Comments not found!!!</h2>
+          <h2>Comments not found or loading...</h2>
         </div>
       </div>
     </div>
