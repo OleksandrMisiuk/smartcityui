@@ -30,8 +30,8 @@ export class TaskCreateComponent implements OnInit {
     this.checkoutForm = this.formBuilder.group({
       title: ['',[Validators.required]],
       description: ['',[Validators.required, Validators.minLength(3)]],
-      budget: [''],
-      approvedBudget: [''],
+      budget: ['', [Validators.required]],
+      approvedBudget: ['', [Validators.required]],
       deadlineDate: ['',[Validators.required]],
       taskStatus: [''],
       usersOrganizationsId: ['']
