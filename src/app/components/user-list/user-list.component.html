@@ -58,9 +58,20 @@
           <button *ngIf="!isCurrent(user)" class="activate" (click)="deactivateUser(user)"><i class="fas fa-minus-circle"></i></button>
         </td>
       </tr>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" (click)=getUsersLimit(1)>1</a></li>
+          <li class="page-item"><a class="page-link" (click)=getUsersLimit(2)>2</a></li>
+          <li class="page-item"><a class="page-link" (click)=getUsersLimit(3)>3</a></li>
+          <li class="page-item"><a class="page-link" (click)=getUsersLimit(4)>4</a></li>
+          <li class="page-item"><a class="page-link" (click)=getUsersLimit(5)>5</a></li>
+        </ul>
+      </nav>
     </table>
+    
   </div>
 </div>
+
 <ng-template #accessDenied>
   <div class="denied mt-3 p-5 alert-danger">
     <h2 class="text-danger mt-3">Access denied</h2>
