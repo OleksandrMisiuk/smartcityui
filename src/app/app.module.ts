@@ -38,8 +38,12 @@ import {MatConfirmDialogComponent} from './components/mat-confirm-dialog/mat-con
 import {ToastrModule} from 'ngx-toastr';
 import { PasswordResetViaMailComponent } from './password-reset-via-mail/password-reset-via-mail.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+<<<<<<< HEAD
 import { TaskDetailsComponent } from './task-details/task-details.component';
 
+=======
+import { NgxPaginationModule } from 'ngx-pagination';
+>>>>>>> dcee15c3881384f8301c7c442c326147de4d97d1
 @NgModule({
   declarations: [
     AppComponent,
@@ -95,7 +99,8 @@ import { TaskDetailsComponent } from './task-details/task-details.component';
       }
     ),
     MatTooltipModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    BrowserModule, NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent],
