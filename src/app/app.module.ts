@@ -38,6 +38,7 @@ import {MatConfirmDialogComponent} from './components/mat-confirm-dialog/mat-con
 import {ToastrModule} from 'ngx-toastr';
 import { PasswordResetViaMailComponent } from './password-reset-via-mail/password-reset-via-mail.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { TaskDetailsComponent } from './task-details/task-details.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
     MatConfirmDialogComponent,
     PasswordResetViaMailComponent,
     ForgotPasswordComponent,
+    TaskDetailsComponent,
   ],
   imports: [
     MatButtonModule,
