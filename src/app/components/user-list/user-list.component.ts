@@ -48,6 +48,14 @@ export class UserListComponent implements OnInit {
     });
   }
 
+  getUserByEmail(inputName: String) {
+    this.userService.getUserbyEmail(inputName).subscribe(userFind => {   
+      let users = [];
+      users.push(userFind);
+      this.users = users;
+    });
+  }
+
   getUsersLimit(pageId: Number) {
     this.userService.getAllUsers(pageId).subscribe(data => {
       this.users = data;
@@ -66,8 +74,8 @@ export class UserListComponent implements OnInit {
 
   search(){
     this.users = this.allUsers.filter(value => {
-      if(value.name) {
-        return value.name.toLowerCase().indexOf(this.inputName.toLowerCase()) > -1
+      if(value.email) {
+        return value.email.toLowerCase().indexOf(this.inputName.toLowerCase()) > -1
       }
       return false;
     });
